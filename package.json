@@ -1,0 +1,23 @@
+{
+  "name": "sql-syntax",
+  "version": "1.0.0",
+  "description": "Tagged template literals utilities for ease of composing SQL queries.",
+  "main": "index.js",
+  "repository": "https://github.com/t83714/SQLSyntax.git",
+  "author": "Jacky Jiang <t83714@gmail.com>",
+  "license": "Apache-2.0",
+  "private": true,
+  "scripts": {
+    "prettier": "prettier --write 'src/*.js' 'src/*.ts'",
+    "dev": "ts-node --project tsconfig.run.json --require tsconfig-paths/register src/index.ts"
+  },
+  "devDependencies": {
+    "prettier": "^2.5.1",
+    "ts-node": "^10.4.0",
+    "tsconfig-paths": "^3.12.0",
+    "tslib": "^2.3.1",
+    "typedoc": "^0.22.11",
+    "typedoc-plugin-markdown": "^3.11.13",
+    "typescript": "^4.5.5"
+  }
+}
