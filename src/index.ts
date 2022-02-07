@@ -6,7 +6,7 @@ export type Value =
     | null
     | undefined
     | Value[]
-    | { [key: PropertyKey]: Value };
+    | { [key: string]: Value };
 
 export type RawValue = Value | SQLSyntax;
 
