@@ -18,7 +18,7 @@
     "prettier": "prettier --write 'src/*.js' 'src/*.ts'",
     "prebuild": "rimraf dist",
     "build": "rollup -c -m",
-    "build-docs": "rimraf docs && typedoc --gaID G-9TMY41X6WG --out docs src/index.ts",
+    "build-docs": "rimraf docs && typedoc --gaID G-9TMY41X6WG --theme default --includeVersion --out docs src/index.ts",
     "dev": "ts-node --project tsconfig.run.json --require tsconfig-paths/register src/index.ts",
     "prepare": "npm run build"
   },
@@ -35,7 +35,6 @@
     "tsconfig-paths": "^3.12.0",
     "tslib": "^2.3.1",
     "typedoc": "^0.22.11",
-    "typedoc-plugin-markdown": "^3.11.13",
     "typescript": "^4.5.5"
   }
 }
