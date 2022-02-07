@@ -2,17 +2,35 @@
   "name": "sql-syntax",
   "version": "1.0.0",
   "description": "Tagged template literals utilities for ease of composing SQL queries.",
-  "main": "index.js",
+  "main": "./dist/cjs/index.js",
+  "types": "./dist/cjs/index.d.ts",
+  "module": "./dist/esm/index.js",
+  "unpkg": "./dist/umd-prod/index.js",
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
   "repository": "https://github.com/t83714/SQLSyntax.git",
   "author": "Jacky Jiang <t83714@gmail.com>",
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
     "prettier": "prettier --write 'src/*.js' 'src/*.ts'",
-    "dev": "ts-node --project tsconfig.run.json --require tsconfig-paths/register src/index.ts"
+    "prebuild": "rimraf dist",
+    "build": "rollup -c -m",
+    "build-docs": "rimraf docs && typedoc --gaID G-9TMY41X6WG --out docs src/index.ts",
+    "dev": "ts-node --project tsconfig.run.json --require tsconfig-paths/register src/index.ts",
+    "prepare": "npm run build"
   },
+  "sideEffects": false,
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-node-resolve": "^13.1.3",
+    "@rollup/plugin-typescript": "^8.3.0",
     "prettier": "^2.5.1",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.67.0",
+    "rollup-plugin-terser": "^7.0.2",
     "ts-node": "^10.4.0",
     "tsconfig-paths": "^3.12.0",
     "tslib": "^2.3.1",
