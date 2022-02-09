@@ -8,7 +8,6 @@
   "unpkg": "./dist/umd-prod/index.js",
   "files": [
     "dist",
-    "src",
     "LICENSE"
   ],
   "repository": "https://github.com/t83714/SQLSyntax.git",
