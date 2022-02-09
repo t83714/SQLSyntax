@@ -103,21 +103,31 @@ export class SQLSyntax {
     }
 
     toQuery(): [string, Value[]] {
-        if (this.isEmpty) {
+        if (SQLSyntax.customToQueryFunc) {
+            return SQLSyntax.customToQueryFunc(this);
+        } else {
+            return SQLSyntax.defaultToQueryFunc(this);
+        }
+    }
+
+    static defaultToQueryFunc(sql: SQLSyntax): [string, Value[]] {
+        if (sql.isEmpty) {
             return ["", []];
         }
         const finalParts: string[] = [];
-        this.values.forEach((value, idx) => {
-            finalParts.push(this.sqlParts[idx], `$${idx + 1}`);
+        sql.values.forEach((value, idx) => {
+            finalParts.push(sql.sqlParts[idx], `$${idx + 1}`);
         });
-        if (this.sqlParts.length > this.values.length) {
+        if (sql.sqlParts.length > sql.values.length) {
             finalParts.push(
-                ...this.sqlParts.slice(this.values.length, this.sqlParts.length)
+                ...sql.sqlParts.slice(sql.values.length, sql.sqlParts.length)
             );
         }
 
-        return [finalParts.join(""), this.values];
+        return [finalParts.join(""), sql.values];
     }
+
+    static customToQueryFunc?: (sql: SQLSyntax) => [string, Value[]];
 
     append(syntax: SQLSyntax) {
         return sqls`${this} ${syntax}`;
