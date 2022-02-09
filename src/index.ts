@@ -23,10 +23,10 @@ export class SQLSyntax {
     private readonly rawValues?: RawValue[];
 
     // when `isEmpty`, the object represent an empty SQL query piece / fragment
-    readonly isEmpty: boolean;
+    public readonly isEmpty: boolean;
 
-    readonly values: Value[] = [];
-    readonly sqlParts: string[] = [];
+    public readonly values: Value[] = [];
+    public readonly sqlParts: string[] = [];
 
     constructor(
         isEmpty: boolean,
@@ -127,7 +127,7 @@ export class SQLSyntax {
         return [finalParts.join(""), sql.values];
     }
 
-    static customToQueryFunc?: (sql: SQLSyntax) => [string, Value[]];
+    public static customToQueryFunc?: (sql: SQLSyntax) => [string, Value[]];
 
     append(syntax: SQLSyntax) {
         return SQLSyntax.sqls`${this} ${syntax}`;
@@ -249,7 +249,9 @@ export class SQLSyntax {
                 throw new Error("empty value list is not allowed for `in`.");
             } else {
                 return SQLSyntax.sqls`${this} IN ${SQLSyntax.csv(
-                    ...valueOrSubQuery.map((v: any) => SQLSyntax.sqls`${v}`)
+                    ...valueOrSubQuery.map(
+                        (v: RawValue) => SQLSyntax.sqls`${v}`
+                    )
                 ).roundBracket()}`;
             }
         }
@@ -269,17 +271,19 @@ export class SQLSyntax {
                 throw new Error("empty SQLSyntax is not allowed for `notIn`.");
             } else {
                 return SQLSyntax.sqls`${this} NOT IN ${SQLSyntax.csv(
-                    ...valueOrSubQuery.map((v: any) => SQLSyntax.sqls`${v}`)
+                    ...valueOrSubQuery.map(
+                        (v: RawValue) => SQLSyntax.sqls`${v}`
+                    )
                 ).roundBracket()}`;
             }
         }
     }
 
-    like(value: String) {
+    like(value: string) {
         return SQLSyntax.sqls`${this} LIKE ${value}`;
     }
 
-    notLike(value: String) {
+    notLike(value: string) {
         return SQLSyntax.sqls`${this} NOT LIKE ${value}`;
     }
 
@@ -297,9 +301,9 @@ export class SQLSyntax {
         return SQLSyntax.sqls`${this} NOT EXISTS ${part}`;
     }
 
-    static empty = new SQLSyntax(true);
+    public static empty = new SQLSyntax(true);
 
-    static sqls(sqlParts: TemplateStringsArray, ...values: any[]) {
+    static sqls(sqlParts: TemplateStringsArray, ...values: RawValue[]) {
         if (sqlParts.length === 1 && sqlParts[0] === "") {
             return SQLSyntax.empty;
         }
@@ -314,12 +318,11 @@ export class SQLSyntax {
      *
      * @static
      * @param {string} sqlStr
-     * @param {any[]} [params=[]]
      * @return {SQLSyntax}
      * @memberof SQLSyntax
      */
-    static createUnsafely(sqlStr: string, params: any[] = []): SQLSyntax {
-        return new SQLSyntax(false, undefined, undefined, [sqlStr], params);
+    static createUnsafely(sqlStr: string): SQLSyntax {
+        return new SQLSyntax(false, undefined, undefined, [sqlStr]);
     }
 
     static filterEmpty(parts: SQLSyntax[]) {
@@ -332,7 +335,7 @@ export class SQLSyntax {
     static join(
         parts: SQLSyntax[],
         delimiter: SQLSyntax,
-        spaceBeforeDelimier: boolean = true
+        spaceBeforeDelimier = true
     ) {
         parts = SQLSyntax.filterEmpty(parts);
         if (!parts?.length) {
@@ -408,8 +411,8 @@ export class SQLSyntax {
         return SQLSyntax.empty.orderBy(...columns);
     }
 
-    static asc = SQLSyntax.empty.asc();
-    static desc = SQLSyntax.empty.desc();
+    public static asc = SQLSyntax.empty.asc();
+    public static desc = SQLSyntax.empty.desc();
 
     static limit(n: number) {
         return SQLSyntax.empty.limit(n);
@@ -472,7 +475,9 @@ export class SQLSyntax {
                 return SQLSyntax.sqls`FALSE`;
             } else {
                 return SQLSyntax.sqls`${column} IN ${SQLSyntax.csv(
-                    ...valueOrSubQuery.map((v: any) => SQLSyntax.sqls`${v}`)
+                    ...valueOrSubQuery.map(
+                        (v: RawValue) => SQLSyntax.sqls`${v}`
+                    )
                 ).roundBracket()}`;
             }
         }
@@ -495,17 +500,19 @@ export class SQLSyntax {
                 return SQLSyntax.sqls`TRUE`;
             } else {
                 return SQLSyntax.sqls`${column} NOT IN ${SQLSyntax.csv(
-                    ...valueOrSubQuery.map((v: any) => SQLSyntax.sqls`${v}`)
+                    ...valueOrSubQuery.map(
+                        (v: RawValue) => SQLSyntax.sqls`${v}`
+                    )
                 ).roundBracket()}`;
             }
         }
     }
 
-    static like(column: SQLSyntax, value: String) {
+    static like(column: SQLSyntax, value: string) {
         return SQLSyntax.sqls`${column} LIKE ${value}`;
     }
 
-    static notLike(column: SQLSyntax, value: String) {
+    static notLike(column: SQLSyntax, value: string) {
         return SQLSyntax.sqls`${column} NOT LIKE ${value}`;
     }
 
@@ -549,7 +556,7 @@ export class SQLSyntax {
     }
 }
 
-export function sqls(sqlParts: TemplateStringsArray, ...values: any[]) {
+export function sqls(sqlParts: TemplateStringsArray, ...values: RawValue[]) {
     return SQLSyntax.sqls(sqlParts, ...values);
 }
 
@@ -594,9 +601,9 @@ export function escapeIdentifier(id: string): SQLSyntax {
  * @return {*}  {SQLSyntax}
  */
 export function getTableColumnName(
-    columnName: String,
-    tableRef: String = "",
-    useLowerCaseColumnName: Boolean = false
+    columnName: string,
+    tableRef = "",
+    useLowerCaseColumnName = false
 ): SQLSyntax {
     const id = [
         tableRef,
