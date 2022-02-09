@@ -6,7 +6,7 @@ import pkg from "./package.json";
 import { terser } from "rollup-plugin-terser";
 
 const tsconfigPath = path.resolve(__dirname, "./tsconfig.json");
-const ensureArray = maybeArr =>
+const ensureArray = (maybeArr) =>
     Array.isArray(maybeArr) ? maybeArr : [maybeArr];
 
 const extensions = [".js"];
@@ -23,7 +23,7 @@ const createConfig = ({
 }) => {
     return {
         input: input ? input : "src/index.ts",
-        output: ensureArray(output).map(format =>
+        output: ensureArray(output).map((format) =>
             Object.assign({}, format, {
                 name: "opa-compile-response-parser",
                 exports: "named"
@@ -79,6 +79,9 @@ export default [
             format: "esm",
             file: "dist/esm/index.js"
         },
+        tsOptions: {
+            target: "es6"
+        },
         external: "none"
     }),
     // --- ES Module for Web Browser
@@ -86,6 +89,9 @@ export default [
         output: {
             format: "esm",
             file: "dist/mjs/index.mjs"
+        },
+        tsOptions: {
+            target: "es6"
         },
         external: "none",
         min: true

@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "importHelpers": true,
+        "moduleResolution": "node",
+        "target": "es5",
+        "baseUrl": ".",
+        "paths": {
+            "sql-syntax": ["../dist/cjs"]
+        }
+    }
+}
