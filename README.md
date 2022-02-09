@@ -39,7 +39,7 @@ const query2:SQLSyntax = sqls`SELECT * FROM users WHERE ${condition1} AND ${cond
 
 ### Replace Built-in `toQuery` Method Logic
 
-The default `toQuery` of SQLSyntax object will generate SQL targeting postgreSQL.
+The default `toQuery` of `SQLSyntax` object will generate SQL targeting postgreSQL.
 If it doesn't work for you, you can replace the logic with your own logic:
 
 ```typescript
@@ -48,3 +48,11 @@ SQLSyntax.customToQueryFunc = (s:SQLSyntax) => {
     //you won implementation...
 }
 ```
+
+### Re: SQLSyntax.createUnsafely
+
+Although not a common case, you might need to insert a SQL indentifier (e.g. column name) at runtime (e.g. from a string variable) to your SQL query.
+`SQLSyntax`.`createUnsafely` allows you to achieve that by directly attach the input string to your SQL query.
+Make sure you process the string input well to avoid SQL injection vulnerability.
+
+Alternatively, instead of using `SQLSyntax`.`createUnsafely`, you can use the included `escapeIdentifier` function (for PostgreSQL only) to escape an indentifier. This function will return a SQLSyntax instance so that you don't need to use `SQLSyntax`.`createUnsafely`.
