@@ -37,4 +37,14 @@ const query2:SQLSyntax = sqls`SELECT * FROM users WHERE ${condition1} AND ${cond
 // SELECT * FROM users WHERE user_id = $1 AND number = $2
 ```
 
+### Replace Built-in `toQuery` Method Logic
 
+The default `toQuery` of SQLSyntax object will generate SQL targeting postgreSQL.
+If it doesn't work for you, you can replace the logic with your own logic:
+
+```typescript
+import SQLSyntax from "sql-syntax";
+SQLSyntax.customToQueryFunc = (s:SQLSyntax) => {
+    //you won implementation...
+}
+```
