@@ -40,6 +40,7 @@ jobs:
           repo=$(cut -d '/' -f 2 <<< "$GITHUB_REPOSITORY") 
           # build docs
           yarn build-docs
+          # push to github page branch
           cp --force -u -r ${DOCS_LOCAL_PATH}/* ${DOCS_REPO_PATH}/
           rm -Rf ${DOCS_LOCAL_PATH}
           pushd "${DOCS_REPO_PATH}" > /dev/null
@@ -47,7 +48,7 @@ jobs:
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           git add --all
           git commit --message="auto update docs" --signoff
-          git push "https://x-access-token:$CR_TOKEN@github.com/${$GITHUB_REPOSITORY}" ${DOCS_BRANCH_NAME}
+          git push "https://x-access-token:$CR_TOKEN@github.com/${GITHUB_REPOSITORY}" ${DOCS_BRANCH_NAME}
           popd > /dev/null
 
 
