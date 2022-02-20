@@ -103,12 +103,20 @@ export class SQLSyntax {
     }
 
     toQuery(): [string, Value[]] {
-        SQLSyntax.printDebugInfo(this);
+        let query: [string, Value[]];
         if (SQLSyntax.customToQueryFunc) {
-            return SQLSyntax.customToQueryFunc(this);
+            query = SQLSyntax.customToQueryFunc(this);
         } else {
-            return SQLSyntax.defaultToQueryFunc(this);
+            query = SQLSyntax.defaultToQueryFunc(this);
         }
+
+        if (SQLSyntax.isDebugMode) {
+            const [sqlQuery, params] = query;
+            console.log("SQL Query: ", sqlQuery);
+            console.log("SQL Query params: ", params);
+        }
+
+        return query;
     }
 
     static defaultToQueryFunc(sql: SQLSyntax): [string, Value[]] {
@@ -305,14 +313,6 @@ export class SQLSyntax {
     public static isDebugMode = false;
 
     public static readonly empty = new SQLSyntax(true);
-
-    static printDebugInfo(sql: SQLSyntax) {
-        if (SQLSyntax.isDebugMode) {
-            const [query, params] = sql.toQuery();
-            console.log("SQL Query: ", query);
-            console.log("SQL Query params: ", params);
-        }
-    }
 
     static sqls(sqlParts: TemplateStringsArray, ...values: RawValue[]) {
         if (sqlParts.length === 1 && sqlParts[0] === "") {
