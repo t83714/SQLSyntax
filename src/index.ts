@@ -103,6 +103,7 @@ export class SQLSyntax {
     }
 
     toQuery(): [string, Value[]] {
+        SQLSyntax.printDebugInfo(this);
         if (SQLSyntax.customToQueryFunc) {
             return SQLSyntax.customToQueryFunc(this);
         } else {
@@ -301,7 +302,17 @@ export class SQLSyntax {
         return SQLSyntax.sqls`${this} NOT EXISTS ${part}`;
     }
 
-    public static empty = new SQLSyntax(true);
+    public static isDebugMode = false;
+
+    public static readonly empty = new SQLSyntax(true);
+
+    static printDebugInfo(sql: SQLSyntax) {
+        if (SQLSyntax.isDebugMode) {
+            const [query, params] = sql.toQuery();
+            console.log("SQL Query: ", query);
+            console.log("SQL Query params: ", params);
+        }
+    }
 
     static sqls(sqlParts: TemplateStringsArray, ...values: RawValue[]) {
         if (sqlParts.length === 1 && sqlParts[0] === "") {
@@ -411,8 +422,8 @@ export class SQLSyntax {
         return SQLSyntax.empty.orderBy(...columns);
     }
 
-    public static asc = SQLSyntax.empty.asc();
-    public static desc = SQLSyntax.empty.desc();
+    public static readonly asc = SQLSyntax.empty.asc();
+    public static readonly desc = SQLSyntax.empty.desc();
 
     static limit(n: number) {
         return SQLSyntax.empty.limit(n);
