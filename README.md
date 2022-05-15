@@ -10,6 +10,8 @@ This is a javascript port of ScalikeJBDC's [SQLSyntax](http://scalikejdbc.org/do
 
 https://t83714.github.io/SQLSyntax/
 
+The [`SQLSyntax` class](https://t83714.github.io/SQLSyntax/classes/SQLSyntax.html) also comes with many useful SQL query composing helper functions. e.g. `joinWithAnd`, `where` etc. For more information, please refer to [the API document](https://t83714.github.io/SQLSyntax/classes/SQLSyntax.html). 
+
 ### Example Usgae
 
 ```typescript
@@ -48,14 +50,37 @@ If it doesn't work for you, you can replace the logic with your own logic:
 ```typescript
 import SQLSyntax from "sql-syntax";
 SQLSyntax.customToQueryFunc = (s:SQLSyntax) => {
-    //you won implementation...
+    //you own implementation...
 }
 ```
 
-### Re: SQLSyntax.createUnsafely
+### Specify Column or Table Names in Query with Variables
 
-Although not a common case, you might need to insert a SQL indentifier (e.g. column name) at runtime (e.g. from a string variable) to your SQL query.
-`SQLSyntax`.`createUnsafely` allows you to achieve that by directly attach the input string to your SQL query.
-Make sure you process the string input well to avoid SQL injection vulnerability.
+> For most cases, you should not need to specify a SQL indentifier (e.g. column name) at runtime (e.g. from a string variable) in a SQL Query. You should think about whether it's possible (for most cases, it should be possible) to avoid using `createUnsafely` method to specify a SQL indentifier using runtime varilable.
 
-Alternatively, instead of using `SQLSyntax`.`createUnsafely`, you can use the included `escapeIdentifier` function (for PostgreSQL only) to escape an indentifier. This function will return a SQLSyntax instance so that you don't need to use `SQLSyntax`.`createUnsafely`.
+By default, `SQLSyntax`'s sqls function will treat any string interpolation values as query parameters for safety concerns. Thus, you won't be able to insert a SQL indentifier (e.g. column or table names) at runtime (e.g. from a string variable) to your SQL query. e.g.:
+
+```typescript
+import SQLSyntax, {sqls} from "sql-syntax";
+const myColumnName: string = "field1";
+const query = sqls`SELECT ${myColumnName} FROM users`;
+const [sql, parameters] = query.toQuery();
+// sql: SELECT $1 FROM users
+// parameters: ["field1"]
+```
+
+To make it possible, SQLSyntax offers a `createUnsafely` method that allow you to create an instance of SQLSyntax class from any plain string.
+For the same example above, we can use `createUnsafely` method to create the desired query:
+
+```typescript
+import SQLSyntax, {sqls} from "sql-syntax";
+const myColumnName:SQLSyntax = SQLSyntax.createUnsafely("field1");
+const query = sqls`SELECT ${myColumnName} FROM users`;
+const [sql, parameters] = query.toQuery();
+// sql: SELECT field1 FROM users
+// parameters: []
+```
+
+As the content of the string variable will become part of SQL query via the `createUnsafely` method. You need to valiate / process the input string properly by yourself to avoid SQL injection vulnerabilities when use the `createUnsafely` method.
+
+Alternatively, you can also use the included `escapeIdentifier` function (for PostgreSQL only) to escape an indentifier. This function will return a SQLSyntax instance as well but will try to filter / escape any invalid characters to make sure the resulted indentifier string is always safe to be included in a SQL query.
