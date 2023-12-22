@@ -1,7 +1,7 @@
 # SQLSyntax
 
 ![npm](https://img.shields.io/npm/v/sql-syntax?style=plastic)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/t83714/SQLSyntax/Main%20CI%20Workflow)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/t83714/SQLSyntax/main.yml?branch=main)
 
 Tagged template literals utilities for ease of composing SQL queries. 
 This is a javascript port of ScalikeJBDC's [SQLSyntax](http://scalikejdbc.org/documentation/sql-interpolation.html#sqlsyntax) class.
