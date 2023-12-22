@@ -1,0 +1,7 @@
+.eslintrc
+.github/
+.vscode/
+src/
+tsconfig.json 
+dist/test/
+docs/

@@ -9,22 +9,22 @@ env:
   DOCS_LOCAL_PATH: docs
 
 jobs:
-  build-test-eslint-node-14:
+  build-test-eslint-node-18:
     name: Build, Test & Eslint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js 14
+      - name: Use Node.js 18
         uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 18
       - run: yarn install
       - run: yarn build
       - run: yarn test
       - run: yarn eslint
 
       - name: checkout docs branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: ${{ env.GITHUB_REPOSITORY }}
           token: ${{ secrets.GH_ACCESS_TOKEN }}
@@ -53,15 +53,15 @@ jobs:
 
 
 
-  build-test-eslint-node-12:
+  build-test-eslint-node-20:
     name: Build, Test & Eslint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js 12
+      - name: Use Node.js 20
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 20
       - run: yarn install
       - run: yarn build
       - run: yarn test

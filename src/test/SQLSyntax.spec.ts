@@ -1,6 +1,6 @@
 import {} from "mocha";
 import { expect } from "chai";
-import SQLSyntax, { sqls } from "sql-syntax";
+import SQLSyntax, { sqls } from "../index.js";
 
 describe("Test SQL interpolation", () => {
     it("Should interpolate value correctly", () => {
