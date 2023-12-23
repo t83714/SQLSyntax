@@ -6,6 +6,9 @@
 Tagged template literals utilities for ease of composing SQL queries. 
 This is a javascript port of ScalikeJBDC's [SQLSyntax](http://scalikejdbc.org/documentation/sql-interpolation.html#sqlsyntax) class.
 
+> Please note: from v2.0.0, this package has been released as pure [ESM](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) module. To move your CommonJS project to ESM, [@sindresorhus's post](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c) is worth to read.
+
+
 ### API document
 
 https://t83714.github.io/SQLSyntax/
