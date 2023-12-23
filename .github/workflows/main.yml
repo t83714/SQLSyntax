@@ -47,10 +47,16 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           git add --all
-          git commit --message="auto update docs" --signoff
-          git push "https://x-access-token:$CR_TOKEN@github.com/${GITHUB_REPOSITORY}" ${DOCS_BRANCH_NAME}
-          popd > /dev/null
-
+          git diff --cached --exit-code
+          retVal=$?
+          if [ $retVal -eq 0 ]; then
+            echo "No changes required to commit to the docs..."
+            exit 0
+          else 
+            git commit --message="auto update docs" --signoff 
+            git push "https://x-access-token:$CR_TOKEN@github.com/${GITHUB_REPOSITORY}" ${DOCS_BRANCH_NAME}
+            popd > /dev/null
+          fi
 
 
   build-test-eslint-node-20:
