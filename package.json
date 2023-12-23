@@ -1,6 +1,6 @@
 {
   "name": "sql-syntax",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Tagged template literals utilities for ease of composing SQL queries.",
   "types": "./dist/index.d.ts",
   "type": "module",
